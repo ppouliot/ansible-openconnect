@@ -1,6 +1,5 @@
 ---
 # tasks file for openconnect
----
 - name: Load the OS specific variables
   tags: openconnect
   include_vars: "{{ ansible_os_family }}.yml"
