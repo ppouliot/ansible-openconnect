@@ -1,9 +1,10 @@
 ---
-- name: Install the openconnect packag
-  include_task: install_openconnect.yml
+
+- name: Install the openconnect package
+  include_tasks: install_openconnect.yml
 
 - name: Install the openconnect packag
-  include_task: default_folders.yml
+  include_tasks: default_folders.yml
 
 - name: GlobalProtect Startup Script
-  include_task: openconnect_global_protect_startup.yml
+  include_tasks: openconnect_global_protect_startup.yml
