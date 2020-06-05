@@ -43,7 +43,7 @@ function start() {
     fi
     
 #    openconnect -b --user=${USER} ${HOST} --pid-file=${PIDFILE} --syslog --passwd-on-stdin  <<< ${VPN_PASS}
-    openconnect -l -b --csd-wrapper=/usr/libexec/openconnect/hipreport.sh \
+    openconnect -l -b --pid-file ${PIDFILE} --csd-wrapper=/usr/libexec/openconnect/hipreport.sh \
 	    --dump-http-traffic --protocol=gp -u ${USER} ${HOST} --csd-user=${CSD_USER} \
 	    --pfs --reconnect-timeout=30 --dtls-ciphers=aes-256-cbc --passwd-on-stdin <<< $VPN_PASS
     [ $? -ne 0 ] && echo "Openconnect failed to start!" && \
