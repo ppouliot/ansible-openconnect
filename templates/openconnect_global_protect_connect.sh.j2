@@ -12,9 +12,9 @@
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # VPN Variables
-HOST="https://den-vpn.amperecomputing.com"
-USER="ppouliot"
-CSD_USER="ansible"
+HOST={{ openconnect_gp_vpn_endpoint }}
+USER={{ openconnect_gp_vpn_username }}
+CSD_USER={{ openconnect_gp_csd_username }}
 #VPN_PASS="##PASSWORD##"
 #CERT="/my/cert.pem"
 #KEY="/my/key.pem"

@@ -2,3 +2,6 @@
 # defaults file for openconnect
 openconnect: true
 
+openconnect_vpn_endpoint: 'https://192.168.1.1'
+openconnect_vpn_username: bwanyne
+openconnect_gp_csd_username: ansible
