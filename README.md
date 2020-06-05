@@ -43,7 +43,7 @@ Applying the role to a group of servers while supplying the variables.
 
 ## License
 
-[GPLv2](./license)
+[GPLv2](./LICENSE)
 
 ## Copyright
 
