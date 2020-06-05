@@ -8,7 +8,6 @@ Install and configure openconnect client for vpns tunnels
 1. Creates directories on the filesystem
 1. Creates a startup script for connecting to GP based VPNs
 
-https://github.com/ppouliot/ansible-openconnect
 ## Role Variables
 
 Congfigure some variables for the GP startup script by adding these to your 
