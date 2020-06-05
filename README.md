@@ -27,34 +27,34 @@ from other roles.
 
 ### configure the global protect script.
 
-Congfigure some variables for the GP startup script
+Congfigure some variables for the GP startup script by adding these to your 
+host_vars or group_vars.
 
 ```
 openconnect_gp_vpn_endpoint: 'https://192.168.1.1'
 openconnect_gp_vpn_username: bwanyne
 openconnect_gp_csd_username: ansible
 ```
+### Applying the role to a group of servers
 
 ```
 - hosts: servers
   roles:
     - role: ppouliot.openconnect
-
+  vars:
+    openconnect_gp_vpn_endpoint: 'https://192.168.1.1'
+    openconnect_gp_vpn_username: bwanyne
+    openconnect_gp_csd_username: ansible
 ```
+
+## Contributors
+
+* Peter Pouliot 
+  email: peter@pouliot.net
+* David Karban
+  email: david@karban.eu
+  site: www.karban.eu
 
 ## License
 
 [GPLv2](./license)
-
-## Author Information
-
-* Peter Pouliot, email: peter@pouliot.net
-Original Author
-* David Karban, email: david@karban.eu, site: www.karban.eu
----
-# defaults file for openconnect
-openconnect: true
-
-openconnect_vpn_endpoint: 'https://192.168.1.1'
-openconnect_vpn_username: bwanyne
-openconnect_gp_csd_username: ansible
