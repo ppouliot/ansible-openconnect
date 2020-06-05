@@ -1,0 +1,93 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          openconnect
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Basic script to connect to a SSL VPN using Openconnect
+### END INIT INFO
+
+# Define PATH
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# VPN Variables
+HOST="https://den-vpn.amperecomputing.com"
+USER="ppouliot"
+CSD_USER="ansible"
+#VPN_PASS="##PASSWORD##"
+#CERT="/my/cert.pem"
+#KEY="/my/key.pem"
+
+# Set pidfile
+PIDFILE="/var/run/openconnect.pid"
+
+function start() {
+    # Check if process is running. Exit in this case.
+    [ -f ${PIDFILE} ] && ps -p $(< ${PIDFILE}) &> /dev/null && \
+    echo "Openconnect is already running." && exit 0
+    
+    # Must be root
+    [ ${UID} -ne 0 ] && echo "You must be root to run this script." && exit 1
+    
+    # Connect
+    # For now if not on OSX ask for password on command prompt
+    if [[ $(uname) == "Darwin" ]]; then
+        VPN_PASS=$(osascript -e 'display dialog "RSA Password" default answer "" with title "OpenConnect VPN" with hidden answer' | awk -F'[:,]' '{print $4}')
+    else
+        stty -echo
+        printf "VPN password:"
+        read VPN_PASS
+        stty echo
+        printf "\n"
+    fi
+    
+#    openconnect -b --user=${USER} ${HOST} --pid-file=${PIDFILE} --syslog --passwd-on-stdin  <<< ${VPN_PASS}
+    openconnect -l -b --csd-wrapper=/usr/libexec/openconnect/hipreport.sh \
+	    --dump-http-traffic --protocol=gp -u ${USER} ${HOST} --csd-user=${CSD_USER} \
+	    --pfs --reconnect-timeout=30 --dtls-ciphers=aes-256-cbc --passwd-on-stdin <<< $VPN_PASS
+    [ $? -ne 0 ] && echo "Openconnect failed to start!" && \
+    rm -f ${PIDFILE} && exit 1
+}
+
+function stop() {
+    if [ -f ${PIDFILE} ] && ps -p $(< ${PIDFILE}) &> /dev/null; then
+        # Pid exists, kill process and remove pidfile
+        [ ${UID} -ne 0 ] && echo "You must be root to run this script." && exit 1
+        kill $(< ${PIDFILE}) && rm -f ${PIDFILE}
+    else
+        echo "Openconnect is not running!"
+    fi
+}
+
+function status() {
+    if [ -f ${PIDFILE} ] && ps -p $(< ${PIDFILE}) &> /dev/null; then
+        echo "Openconnect is running."
+        runningtime=$(ps -p $(< ${PIDFILE}) -o etime=)
+        echo "  IP: $(ifconfig | awk '/-->/{print $2}')"
+        echo "  $(ifconfig | awk -F': ' '/^utun/{print $1}'): ${runningtime}"
+
+    else
+        [ -f ${PIDFILE} ] && rm -f ${PIDFILE}
+        echo "Openconnect is stopped."
+        exit 3
+    fi
+}
+
+case "$1" in
+    start)
+start
+;;
+stop)
+stop
+;;
+status)
+status
+;;
+restart)
+stop && start
+;;
+*)
+echo "Usage: ${0##*/} (start|stop|status|restart)" && exit 0
+;;
+esac

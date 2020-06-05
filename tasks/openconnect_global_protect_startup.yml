@@ -1,0 +1,10 @@
+---
+
+- name: "install Openconnect global protect startup Script"
+  template:
+    dest: /etc/openconnect/global_protect_connect.sh
+    src: openconnect_global_protect_connect.sh.j2
+    owner: "root"
+    group: "root"
+    mode: "0755"
+

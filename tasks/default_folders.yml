@@ -1,0 +1,12 @@
+---
+- name: Create folder for openconnect processes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop:
+    - "/etc/openconnect"
+    - "/var/run/openconnect/"
+    - "/var/log/openconnect/"
