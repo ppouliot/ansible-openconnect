@@ -65,7 +65,7 @@ function status() {
         echo "Openconnect is running."
         runningtime=$(ps -p $(< ${PIDFILE}) -o etime=)
         echo "  IP: $(ifconfig | awk '/-->/{print $2}')"
-        echo "  $(ifconfig | awk -F': ' '/^utun/{print $1}'): ${runningtime}"
+        echo "  $(ifconfig | awk -F': ' '/^tun/{print $1}'): ${runningtime}"
 
     else
         [ -f ${PIDFILE} ] && rm -f ${PIDFILE}
