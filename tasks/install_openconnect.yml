@@ -7,19 +7,17 @@
 - name: Install the packages in Redhat derivates
   tags: openconnect
   yum:
-    name: "{{ item }}"
+    name: "{{ openconnect_pkgs }}"
     state: present
-  with_items: "{{ openconnect_pkgs }}"
   when: ansible_os_family == 'RedHat'
 
 - name: Install the mysql packages in Debian derivates
   tags: openconnect
   apt: 
-    name: "{{ item }}"
+    name: "{{ openconnect_pkgs }}"
     state: present
     update_cache: yes
     cache_valid_time: 600
-  with_items: "{{ openconnect_pkgs }}"
   environment:
     # prevent openconnect from autostart after installation
     RUNLEVEL: 1
